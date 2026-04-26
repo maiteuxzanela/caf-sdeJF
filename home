@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafeterias de Juiz de Fora</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5ebe0 0%, #e8d5c4 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #3e2723;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .coffee-icon {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #4e342e;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: #6d4c41;
+            font-size: 1.1rem;
+            margin-top: 0.3rem;
+        }
+
+        .card {
+            background: #fffaf5;
+            border-radius: 1.2rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(62, 39, 35, 0.12);
+            margin-bottom: 2rem;
+        }
+
+        .progress-container {
+            margin-bottom: 1.8rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #5d4037;
+        }
+
+        .progress-bar-bg {
+            background: #e0cec3;
+            border-radius: 20px;
+            height: 14px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #8d6e63, #6d4c41);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        .cafeteria-list {
+            list-style: none;
+        }
+
+        .cafeteria-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 1rem 0.8rem;
+            border-bottom: 1px solid #efe0d5;
+            transition: background 0.2s ease;
+            border-radius: 0.6rem;
+            cursor: pointer;
+        }
+
+        .cafeteria-item:hover {
+            background: #fdf5ef;
+        }
+
+        .cafeteria-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkbox-wrapper {
+            flex-shrink: 0;
+            margin-right: 1rem;
+            margin-top: 0.2rem;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            display: none;
+        }
+
+        .custom-checkbox {
+            width: 26px;
+            height: 26px;
+            border: 2.5px solid #a1887f;
+            border-radius: 6px;
+            display: inline-block;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:checked + .custom-checkbox {
+            background: #6d4c41;
+            border-color: #6d4c41;
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:checked + .custom-checkbox::after {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 3px;
+            width: 7px;
+            height: 13px;
+            border: solid #fff;
+            border-width: 0 2.5px 2.5px 0;
+            transform: rotate(45deg);
+        }
+
+        .custom-checkbox:hover {
+            border-color: #6d4c41;
+            box-shadow: 0 0 0 4px rgba(109, 76, 65, 0.1);
+        }
+
+        .cafeteria-info {
+            flex: 1;
+        }
+
+        .cafeteria-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #4e342e;
+            margin-bottom: 0.2rem;
+        }
+
+        .new-badge {
+            display: inline-block;
+            background: #8d6e63;
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 1rem;
+            margin-left: 0.4rem;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+
+        .cafeteria-address {
+            font-size: 0.9rem;
+            color: #8d6e63;
+            margin-bottom: 0.15rem;
+        }
+
+        .cafeteria-details {
+            font-size: 0.85rem;
+            color: #a1887f;
+            font-style: italic;
+        }
+
+        .cafeteria-item.checked {
+            background: #f9f2ea;
+        }
+
+        .cafeteria-item.checked .cafeteria-name {
+            color: #5d4037;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: #8d6e63;
+            font-size: 0.9rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-reset {
+            display: inline-block;
+            margin-top: 1.2rem;
+            padding: 0.7rem 1.8rem;
+            background: transparent;
+            border: 2px solid #a1887f;
+            color: #5d4037;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-reset:hover {
+            background: #6d4c41;
+            color: #fff;
+            border-color: #6d4c41;
+        }
+
+        .btn-container {
+            text-align: center;
+        }
+
+        .stats-container {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .stats-emoji {
+            font-size: 1.3rem;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            .card {
+                padding: 1.2rem;
+            }
+
+            .cafeteria-item {
+                padding: 0.8rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="coffee-icon">☕</div>
+            <h1>Cafeterias de Juiz de Fora</h1>
+            <p class="subtitle">Marque as que você já conhece!</p>
+        </header>
+
+        <div class="card">
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Seu progresso</span>
+                    <span id="progress-text">0 de 14</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-bar"></div>
+                </div>
+            </div>
+
+            <div class="stats-container" id="stats-container" style="display: none;">
+                <span class="stats-emoji"></span>
+                <span id="stats-message"></span>
+            </div>
+
+            <ul class="cafeteria-list" id="cafeteria-list">
+                <!-- Os itens serão gerados pelo JavaScript -->
+            </ul>
+
+            <div class="btn-container">
+                <button class="btn-reset" id="btn-reset">🔄 Limpar seleções</button>
+            </div>
+        </div>
+
+        <p class="footer-note">
+            ✨ Continue explorando os sabores de Juiz de Fora!
+        </p>
+    </div>
+
+    <script>
+        const cafeterias = [
+            {
+                nome: "Giotti",
+                endereco: "Rua Tiradentes, 762 - Santa Helena",
+                detalhes: "Especializada em microtorrefação de cafés especiais.",
+                novo: false
+            },
+            {
+                nome: "Rellicário",
+                endereco: "Rua São Mateus, 35 - São Mateus (e shoppings)",
+                detalhes: "Diversos métodos de preparo. Unidades no Independência Shopping e Shopping Jardim Norte.",
+                novo: false
+            },
+            {
+                nome: "The Coffee",
+                endereco: "Rua Machado Sobrinho, 15 - Alto dos Passos",
+                detalhes: "Rede famosa com opções autorais.",
+                novo: false
+            },
+            {
+                nome: "Grão Moente",
+                endereco: "Rua Oscar Vidal, 271 - Centro",
+                detalhes: "Tem drinks criativos com café. Unidade também na Av. Barão do Rio Branco.",
+                novo: false
+            },
+            {
+                nome: "Pedra Bonita",
+                endereco: "Av. Rio Branco, 2991 e Rua Santa Rita, 393",
+                detalhes: "Segunda a sábado das 9h às 20h.",
+                novo: true
+            },
+            {
+                nome: "Tutto per lo Caffè",
+                endereco: "Rua Sampaio, 318 - Granbery",
+                detalhes: "Cardápio variado com opções de doces e salgados.",
+                novo: false
+            },
+            {
+                nome: "Bohème Café",
+                endereco: "Rua Francisco Brandi, 177 - São Mateus",
+                detalhes: "Serve brunch all day, em estilo francês.",
+                novo: false
+            },
+            {
+                nome: "UNNI Café",
+                endereco: "Rua Morais e Castro, 236 - Alto dos Passos",
+                detalhes: "Todos os dias das 09h às 20h.",
+                novo: true
+            },
+            {
+                nome: "Planet Music",
+                endereco: "Rua Morais e Castro, 218 - Passos",
+                detalhes: "Café com espaço cultural e loja de presentes.",
+                novo: false
+            },
+            {
+                nome: "Espaço Café Central",
+                endereco: "Galeria Azarias Vilela, 36 - Centro",
+                detalhes: "Ao lado do Teatro Central, serve almoço e happy hour.",
+                novo: false
+            },
+            {
+                nome: "Meiuca",
+                endereco: "Rua Manoel Bernardino, 101 - São Mateus",
+                detalhes: "Espaço agradável com opções veganas e leite vegetal.",
+                novo: false
+            },
+            {
+                nome: "Buena Bar e Café",
+                endereco: "Rua Doutor Romualdo, 320 - São Mateus",
+                detalhes: "Quarta a domingo a partir das 16h.",
+                novo: true
+            },
+            {
+                nome: "Mestre dos Cafés",
+                endereco: "Rua Maj. João Martins, 60 - Galpão 11",
+                detalhes: "Altamente avaliado, especializado em café. Fecha aos sábados.",
+                novo: false
+            },
+            {
+                nome: "Divino Café",
+                endereco: "Av. Presidente Itamar Franco, 3600 - Independência Shopping",
+                detalhes: "Localizado no shopping, é uma opção prática para um café rápido.",
+                novo: false
+            }
+        ];
+
+        const listaEl = document.getElementById('cafeteria-list');
+        const progressText = document.getElementById('progress-text');
+        const progressBar = document.getElementById('progress-bar');
+        const btnReset = document.getElementById('btn-reset');
+        const statsContainer = document.getElementById('stats-container');
+        const statsMessage = document.getElementById('stats-message');
+        const statsEmoji = document.querySelector('.stats-emoji');
+        const total = cafeterias.length;
+
+        // Carregar estado salvo (localStorage)
+        function carregarEstado() {
+            const salvo = localStorage.getItem('cafeterias-juiz-de-fora');
+            if (salvo) {
+                try {
+                    return JSON.parse(salvo);
+                } catch (e) {
+                    return {};
+                }
+            }
+            return {};
+        }
+
+        // Salvar estado no localStorage
+        function salvarEstado(estado) {
+            localStorage.setItem('cafeterias-juiz-de-fora', JSON.stringify(estado));
+        }
+
+        // Obter mensagem motivacional baseada no progresso
+        function getMensagemProgresso(marcados) {
+            const porcentagem = (marcados / total) * 100;
+            if (marcados === 0) {
+                return { emoji: '🆕', texto: 'Nenhuma cafeteria visitada ainda. Hora de começar a explorar!' };
+            } else if (porcentagem <= 25) {
+                return { emoji: '👣', texto: 'Você está no começo da jornada cafeeira!' };
+            } else if (porcentagem <= 50) {
+                return { emoji: '☕', texto: 'Já conhece várias! Continue descobrindo novos sabores.' };
+            } else if (porcentagem <= 75) {
+                return { emoji: '🌟', texto: 'Quase um especialista em cafés de Juiz de Fora!' };
+            } else if (porcentagem < 100) {
+                return { emoji: '🏆', texto: 'Falta pouco para conhecer todas as cafeterias!' };
+            } else {
+                return { emoji: '👑', texto: 'Incrível! Você já conhece todas as cafeterias da lista!' };
+            }
+        }
+
+        // Atualizar barra de progresso e mensagem
+        function atualizarProgresso(estado) {
+            const marcados = Object.values(estado).filter(v => v === true).length;
+            const porcentagem = (marcados / total) * 100;
+            progressText.textContent = `${marcados} de ${total}`;
+            progressBar.style.width = `${porcentagem}%`;
+
+            // Atualizar mensagem
+            const mensagem = getMensagemProgresso(marcados);
+            statsEmoji.textContent = mensagem.emoji;
+            statsMessage.textContent = mensagem.texto;
+
+            if (marcados > 0) {
+                statsContainer.style.display = 'block';
+            } else {
+                statsContainer.style.display = 'none';
+            }
+        }
+
+        // Renderizar a lista
+        function renderizarLista() {
+            const estado = carregarEstado();
+            listaEl.innerHTML = '';
+
+            cafeterias.forEach((cafeteria, index) => {
+                const id = `cafe-${index}`;
+                const checked = estado[id] === true;
+
+                const li = document.createElement('li');
+                li.className = `cafeteria-item ${checked ? 'checked' : ''}`;
+                li.innerHTML = `
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="${id}" ${checked ? 'checked' : ''}>
+                        <label for="${id}" class="custom-checkbox"></label>
+                    </div>
+                    <div class="cafeteria-info">
+                        <div class="cafeteria-name">
+                            ${cafeteria.nome}
+                            ${cafeteria.novo ? '<span class="new-badge">NOVO</span>' : ''}
+                        </div>
+                        <div class="cafeteria-address">📍 ${cafeteria.endereco}</div>
+                        <div class="cafeteria-details">${cafeteria.detalhes}</div>
+                    </div>
+                `;
+
+                // Evento de clique no checkbox
+                const checkbox = li.querySelector('input[type="checkbox"]');
+                checkbox.addEventListener('change', function () {
+                    const novoEstado = carregarEstado();
+                    novoEstado[id] = this.checked;
+                    salvarEstado(novoEstado);
+                    atualizarProgresso(novoEstado);
+
+                    // Atualizar classe visual
+                    if (this.checked) {
+                        li.classList.add('checked');
+                    } else {
+                        li.classList.remove('checked');
+                    }
+                });
+
+                // Evento de clique no item inteiro (para toggle)
+                li.addEventListener('click', function (e) {
+                    // Evitar duplo clique no checkbox
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change'));
+                });
+
+                listaEl.appendChild(li);
+            });
+
+            atualizarProgresso(estado);
+        }
+
+        // Resetar todas as seleções
+        btnReset.addEventListener('click', function () {
+            const confirmacao = confirm('Tem certeza que deseja limpar todas as seleções?');
+            if (confirmacao) {
+                localStorage.removeItem('cafeterias-juiz-de-fora');
+                renderizarLista();
+            }
+        });
+
+        // Inicializar
+        renderizarLista();
+    </script>
+</body>
+</html>
